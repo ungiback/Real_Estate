@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { Flex, Box, Select, Tex, Input, Spinner, Icon, Button } from "@chakra-ui/react";
 import { MdCancel } from 'react-icons/md';
@@ -7,18 +7,21 @@ import Image from "next/image";
 import { filterData, getFilterValues } from '../utils/filterData';
 
 const SearchFilters = () => {
-    const [filters, setFilters] = useState(filterData)
+    const [filters] = useState(filterData)
     const router = useRouter()
+
     const searchProperties = (filterValues) => {
         const path = router.pathname;
         const { query } = router;
 
         const valuse = getFilterValues(filterValues);
 
-        valuse.forEach(item => {
-            query[item.name] = item.value
+        valuse.forEach(item => {   
+            if(item.value && filterValues?.[item.name]) {
+                query[item.name] = item.value
+            }
         })
-        router.push({ pathname: path, query })
+        router.push({ pathname: path, query })     //19~24라인 이해 하기
     }
     return (
         <Flex bg="gray.100" p="4" justifyContent="center" flexWrap="wrap">
